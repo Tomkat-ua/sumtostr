@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h2 class="mb-4">{{ title }}</h2>
+    <form method="post" action="/post" enctype="multipart/form-data">
+            <div class="col-md-4" style="width:1000px;" >
+              <div class="mb-0 row align-items-center">
+                <label class="col-auto col-form-label text-start col ">Сума числами:</label>
+                <input class="form-control form-control-sm col"
+                       type="number" step="0.01"
+                       id="user_input"
+                       name="user_data" required
+                       value="{{ num_value }}">
+              </div>
+                <button class="btn btn-primary" type="submit">Перетворити</button>
+              <div class="mb-0 row align-items-center">
+                <label class="col-auto col-form-label text-start col ">Сума прописом:</label>
+                <input type="text" class="form-control form-control-sm col"
+                       id="str_value"
+                       readonly
+                       value="{{ str_value }}">
+              </div>
+                <button class="btn btn-secondary"
+                        type="button"
+                        onclick="copyInputToClipboard('str_value')">Копіювати</button>
+            </div>
+    </form>
+</div>
+
+
+<script>
+/**
+ * Резервний метод для копіювання тексту з readonly поля
+ * через тимчасовий елемент.
+ */
+function fallbackCopyTextToClipboard(inputElement) {
+    const valueToCopy = inputElement.value;
+    let textArea = document.createElement("textarea");
+
+    // Розміщуємо textarea за межами екрана
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    textArea.value = valueToCopy;
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select(); // Виділяємо текст
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            console.log('Значення успішно скопійовано резервним методом.');
+            return true;
+        } else {
+            console.error('Не вдалося скопіювати резервним методом.');
+            return false;
+        }
+    } catch (err) {
+        console.error('Не вдалося скопіювати резервним методом:', err);
+        return false;
+    } finally {
+        // Видаляємо тимчасовий елемент
+        document.body.removeChild(textArea);
+    }
+}
+
+
+function copyInputToClipboard(elementId) {
+    const inputElement = document.getElementById(elementId);
+
+    if (!inputElement) {
+        console.error(`Елемент з ID '${elementId}' не знайдено.`);
+        return; // Повертаємо, оскільки це не Promise в даному випадку
+    }
+    const valueToCopy = inputElement.value;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        // 🌟 Головний метод
+        navigator.clipboard.writeText(valueToCopy)
+            .then(() => {
+                console.log('Значення успішно скопійовано у буфер обміну.');
+            })
+            .catch(err => {
+                console.error('Помилка копіювання через безпеку/дозволи:', err);
+                // Якщо API не спрацювало (наприклад, через дозволи), спробуємо резервний
+                fallbackCopyTextToClipboard(inputElement);
+            });
+    } else {
+        // Резервний метод
+        fallbackCopyTextToClipboard(inputElement);
+    }
+    alert("Значення скопійовано в буфер 📋");
+}
+</script>
+</body>
+</html>
