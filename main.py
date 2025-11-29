@@ -1,4 +1,5 @@
-
+from typing import Optional
+from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
 import sumtostr
@@ -31,10 +32,24 @@ async def get_endpoints(request: Request):
 
 
 @app.post("/post")
-async def handle_form_data(request: Request,user_data: str = Form(...)):
+async def handle_form_data(request: Request,
+                           # user_data: str = Form(...),
+                           user_data: Optional[str] = Form(None),
+                           switch_value: Optional[str] = Form(None)
+                           ):
+
     str_value = ms(float(user_data.replace(',', '.')))
+
+    is_active_mode = switch_value is not None
+
+    if is_active_mode:
+        print("Активний режим УВІМКНЕНО")
+    else:
+        print("Активний режим ВИМКНЕНО")
+
     data ={
         "request": request,
+        "is_active_mode": is_active_mode,
         "title": "Сума прописом",
         "num_value": user_data,
         "str_value": str_value

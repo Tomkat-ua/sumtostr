@@ -21,6 +21,19 @@
         label {
             font-weight: 600;
         }
+
+        /* CSS для збільшення розміру перемикача */
+        .form-switch-lg .form-check-input {
+            width: 3.5em; /* Збільшуємо ширину (наприклад, з 2em до 3.5em) */
+            height: 1.75em; /* Збільшуємо висоту */
+            /* Додатково: зміщуємо елемент, щоб він виглядав рівно */
+            margin-right: 0.5em;
+        }
+
+        /* Коригуємо позицію кнопки, щоб вона була посередині */
+        .form-switch-lg .form-check-label {
+            padding-top: 0.25em; /* Невелика корекція, якщо потрібно */
+        }
     </style>
 </head>
 <body>
@@ -28,7 +41,16 @@
     <div class="card card-custom mx-auto" style="max-width: 600px;">
         <h3 class="text-center mb-4">{{ title }}</h3>
 
-        <form method="post" action="/post" enctype="multipart/form-data" class="row g-3">
+    <form method="post" action="/post" enctype="multipart/form-data" class="row g-3">
+      {#  <div class="form-check form-switch form-switch-lg">
+          <input class="form-check-input"
+                 type="checkbox"
+                 role="switch"
+                 id="bigSwitch"
+                 name="is_active_mode"
+                 value="on">
+                 <label class="form-check-label" for="bigSwitch">Активний режим</label>
+        </div>#}
 
             <div class="col-12">
                 <label class="form-label">Сума числом:</label>
@@ -55,6 +77,11 @@
                 <button class="btn btn-secondary btn-lg" type="button" onclick="copyInputToClipboard('str_value')">Копіювати</button>
             </div>
         </form>
+        <footer>
+    <p>
+        &copy; 2025 Розробник <a href="http://resume.tomkat.in" target="_blank">VK aka Tomkat</a>.
+    </p>
+</footer>
     </div>
 </div>
 
@@ -96,7 +123,7 @@ function copyInputToClipboard(elementId) {
 }
 </script>
 </body>
-</html>
+
 
 
 
@@ -164,5 +191,6 @@ function copyInputToClipboard(elementId) {
     alert("Значення скопійовано в буфер 📋");
 }
 </script>
-</body>
+
+
 </html>
